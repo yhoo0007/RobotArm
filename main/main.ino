@@ -1,11 +1,23 @@
 #include <BlynkSimpleEsp32.h>
 #include "RobotArm.h"
 #include "MotorController.h"
+#include <ESP32CAN.h>
+#include <CAN_config.h>
 
 
 bool playback = false;
 float x, y, z;  // buffer to receive blynk parameters
 int cpIdx = 0;
+int valvePin = 33;
+
+// CAN bus
+const gpio_num_t CAN_TX = GPIO_NUM_25;
+const gpio_num_t CAN_RX = GPIO_NUM_26;
+CAN_device_t CAN_cfg;
+#define CONVEYOR_ID 0
+#define ROBO_ARM_ID 1
+#define FILLING_ID 2
+#define CAPPING_ID 3
 
 
 void setup() {
@@ -32,7 +44,9 @@ void loop() {
         Serial.println("Playing back");
         robotArm.playback();  // blocking playback
         Serial.println("Cycle completed");
+        delay(500);
         endSignal();
+        Serial.println("Done signal sent!");
     }
 }
 
@@ -51,17 +65,39 @@ void setupBlynk() {
 
 
 void setupCAN() {
-  
+    CAN_cfg.speed = CAN_SPEED_1000KBPS;
+    CAN_cfg.tx_pin_id = CAN_TX;
+    CAN_cfg.rx_pin_id = CAN_RX;
+    CAN_cfg.rx_queue = xQueueCreate(10, sizeof(CAN_frame_t));
+    ESP32Can.CANInit();
 }
 
 
 bool startSignal() {
+    CAN_frame_t rx_frame;
+    if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, 3*portTICK_PERIOD_MS) == pdTRUE) {
+      if (rx_frame.MsgID == CONVEYOR_ID && rx_frame.data.u8[0] == 1) {
+        return true;  
+      }
+    }
     return false;
 }
 
 
 void endSignal() {
-    
+    CAN_frame_t tx_frame;
+    tx_frame.FIR.B.FF = CAN_frame_std;
+    tx_frame.MsgID = ROBO_ARM_ID;
+    tx_frame.FIR.B.DLC = 8;
+    tx_frame.data.u8[0] = 1;
+    tx_frame.data.u8[1] = 0;
+    tx_frame.data.u8[2] = 0;
+    tx_frame.data.u8[3] = 0;
+    tx_frame.data.u8[4] = 0;
+    tx_frame.data.u8[5] = 0;
+    tx_frame.data.u8[6] = 0;
+    tx_frame.data.u8[7] = 0;
+    ESP32Can.CANWriteFrame(&tx_frame);
 }
 
 
@@ -114,7 +150,18 @@ BLYNK_WRITE(V7) {  // set delay checkpoint
 
 
 BLYNK_WRITE(V8) {  // set valve checkpoint
-    robotArm.registerValveCheckpoint(cpIdx, param.asInt());
+    int choice = param.asInt();
+    if (choice == 1) {
+      Serial.println(String(choice) + " Valve ON");
+      choice = 1;
+    } else if (choice == 2) {
+      Serial.println(String(choice) + " Valve OFF");
+      choice = 0;
+    } else {
+      Serial.println("Unknown choice: " + String(choice));
+    }
+    robotArm.registerValveCheckpoint(cpIdx, choice, valvePin);
+//    robotArm.registerValveCheckpoint(cpIdx, param.asInt());
 }
 
 

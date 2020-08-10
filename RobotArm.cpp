@@ -215,10 +215,11 @@ void RobotArm::registerDelayCheckpoint(int cpIdx, int duration) {
 /*
 Saves a checkpoint at the given index as a valve state checkpoint.
 */
-void RobotArm::registerValveCheckpoint(int cpIdx, bool state) {
-    R_DPRINTLN("Registering valve as checkpoint: " + String(cpIdx) + " state: " + String(state));
+void RobotArm::registerValveCheckpoint(int cpIdx, bool state, int pin) {
+    R_DPRINTLN("Registering valve as checkpoint: " + String(cpIdx) + " state: " + String(state) + " pin: " + String(pin));
     checkpoints[cpIdx].type = CP_TYPE_VALVE;
     checkpoints[cpIdx].state = state;
+    checkpoints[cpIdx].pin = pin;
 }
 
 

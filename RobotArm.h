@@ -29,7 +29,7 @@ class RobotArm {
     void executeCheckpoint(int cpIdx);
     void registerPositionCheckpoint(int cpIdx);
     void registerDelayCheckpoint(int cpIdx, int duration);
-    void registerValveCheckpoint(int cpIdx, bool state);
+    void registerValveCheckpoint(int cpIdx, bool state, int pin);
     void clearCheckpoint(int cpIdx);
     void clearAllCheckpoints();
 

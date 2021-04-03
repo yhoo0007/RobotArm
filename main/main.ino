@@ -47,20 +47,25 @@ void setup() {
 
 void loop() {
     Blynk.run();
-    if (playback || startSignal) {
-        Serial.println("Playing back");
-//        robotArm.playback();  // blocking playback
-        for (int i = 0; i < NUM_CP; i++) {
-            if (i == startLabelCp) {
-                startLabel();
-            } else {
-                robotArm.executeCheckpoint(i);
-            }
-        }
-        Serial.println("Cycle completed");
-        delay(200);
-        endSignal();
-        Serial.println("Done signal sent!");
+    if (Blynk.connected()) {
+      if (playback || startSignal) {
+          Serial.println("Playing back");
+  //        robotArm.playback();  // blocking playback
+          for (int i = 0; i < NUM_CP; i++) {
+              if (i == startLabelCp) {
+                  startLabel();
+              } else {
+                  robotArm.executeCheckpoint(i);
+              }
+          }
+          Serial.println("Cycle completed");
+          startSignal = false;
+          bridgeConv.virtualWrite(V9, ROBO_ARM1_ID);
+          Serial.println("Done signal sent!");
+      }
+    } else {
+        Serial.println("BLYNK DISCONNECTED");
+        
     }
 }
 

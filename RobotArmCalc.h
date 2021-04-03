@@ -9,6 +9,5 @@
 #define stepsToAngle(steps, ratio) ((steps) / (ratio) * DEGREE_PER_STEP)
 
 char coordToAngle(float x, float y, float z, float *baseAngle, float *armAAngle, float *armBAngle, float *pickerAngle);
-int calcTimeMillis(int steps, int maxTime, int minTime, int stepRange);
 
 #endif

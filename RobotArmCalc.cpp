@@ -32,7 +32,6 @@ char coordToAngle(float x, float y, float z, float *baseAngle, float *armAAngle,
     _armBAngle = acos((r3 * r3 - ARM_A2 - ARM_B2) / (-2 * ARM_A * ARM_B)) * RAD_TO_DEG;
 
     // calculate picker angle
-    // _pickerAngle = 180 - (_armBAngle - (90 - _armAAngle));
     _pickerAngle = 270 - _armBAngle - _armAAngle;
 
     // validate
@@ -48,10 +47,4 @@ char coordToAngle(float x, float y, float z, float *baseAngle, float *armAAngle,
     *armBAngle = _armBAngle;
     *pickerAngle = _pickerAngle;
     return 0;
-}
-
-
-int calcTimeMillis(int steps, int maxTime, int minTime, int stepRange) {
-    R_DPRINTLN("CalcTime Max: " + String(maxTime) + " Min: " + String(minTime) + " Steps: " + String(steps));
-    return (maxTime - minTime) * sin(((double)abs(steps) * M_PI) / (stepRange * 2)) + 100;
 }

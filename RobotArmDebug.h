@@ -3,7 +3,7 @@
 
 #include "HardwareSerial.h"
 
-#define ROBOT_ARM_DEBUG
+// #define ROBOT_ARM_DEBUG
 
 #ifdef ROBOT_ARM_DEBUG
 #define R_DPRINT(x) Serial.print(x)

@@ -47,7 +47,7 @@ void setup() {
 
 void loop() {
     Blynk.run();
-    if (playback || startSignal()) {
+    if (playback || startSignal) {
         Serial.println("Playing back");
 //        robotArm.playback();  // blocking playback
         for (int i = 0; i < NUM_CP; i++) {

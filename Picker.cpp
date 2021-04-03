@@ -105,6 +105,7 @@ void Picker::moveSteps(int stepsToMove, int timeMillis) {
 
     // form frequencies array
     int midPoint = timeSlices / 2;  // 43 / 2 = 21
+    free(freqs);
     freqs = (uint16_t*)malloc(sizeof(uint16_t) * timeSlices);
     for (int i = 0; i < timeSlices; i++) {
         freqs[i] = i < midPoint ?

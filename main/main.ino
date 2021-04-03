@@ -148,21 +148,21 @@ BLYNK_CONNECTED() {
 }
 
 
-void startLabel() {
-    CAN_frame_t tx_frame;
-    tx_frame.FIR.B.FF = CAN_frame_std;
-    tx_frame.MsgID = ROBO_ARM1_ID;
-    tx_frame.FIR.B.DLC = 8;
-    tx_frame.data.u8[0] = 0;
-    tx_frame.data.u8[1] = 1;
-    tx_frame.data.u8[2] = 0;
-    tx_frame.data.u8[3] = 0;
-    tx_frame.data.u8[4] = 0;
-    tx_frame.data.u8[5] = 0;
-    tx_frame.data.u8[6] = 0;
-    tx_frame.data.u8[7] = 0;
-    ESP32Can.CANWriteFrame(&tx_frame);    
-}
+// void startLabel() {
+//     CAN_frame_t tx_frame;
+//     tx_frame.FIR.B.FF = CAN_frame_std;
+//     tx_frame.MsgID = ROBO_ARM1_ID;
+//     tx_frame.FIR.B.DLC = 8;
+//     tx_frame.data.u8[0] = 0;
+//     tx_frame.data.u8[1] = 1;
+//     tx_frame.data.u8[2] = 0;
+//     tx_frame.data.u8[3] = 0;
+//     tx_frame.data.u8[4] = 0;
+//     tx_frame.data.u8[5] = 0;
+//     tx_frame.data.u8[6] = 0;
+//     tx_frame.data.u8[7] = 0;
+//     ESP32Can.CANWriteFrame(&tx_frame);    
+// }
 
 
 BLYNK_WRITE(V0) {  // X position slider

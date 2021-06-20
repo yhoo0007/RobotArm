@@ -1,10 +1,8 @@
 #include <BlynkSimpleEsp32.h>
 #include "RobotArm.h"
 #include "MotorController.h"
-#include <ESP32CAN.h>
-#include <CAN_config.h>
 
-WidgetBridge bridgeConv(V14); //Initiating Bridge Widget on V1 of Device A
+WidgetBridge bridgeConv(V14);
 
 bool startSignal = false;
 bool playback = false;
@@ -12,10 +10,6 @@ float x, y, z;  // buffer to receive blynk parameters
 int cpIdx = 0;
 int valvePin = 33;
 
-// CAN bus
-const gpio_num_t CAN_TX = GPIO_NUM_25;
-const gpio_num_t CAN_RX = GPIO_NUM_26;
-CAN_device_t CAN_cfg;
 #define CONVEYOR_ID 0
 #define ROBO_ARM1_ID 1
 #define ROBO_ARM2_ID 2
@@ -72,15 +66,6 @@ void setupBlynk() {
     Blynk.virtualWrite(V1, y);
     Blynk.virtualWrite(V2, z);
     Blynk.virtualWrite(V12, robotArm.speedMulti);
-}
-
-
-void setupCAN() {
-    CAN_cfg.speed = CAN_SPEED_1000KBPS;
-    CAN_cfg.tx_pin_id = CAN_TX;
-    CAN_cfg.rx_pin_id = CAN_RX;
-    CAN_cfg.rx_queue = xQueueCreate(10, sizeof(CAN_frame_t));
-    ESP32Can.CANInit();
 }
 
 

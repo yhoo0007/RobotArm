@@ -179,7 +179,7 @@ void RobotArm::executeCheckpoint(int cpIdx) {
             delay(checkpoints[cpIdx].duration);
         }
         break;
-        case CP_TYPE_VALVE: 
+        case CP_TYPE_GPIO: 
         {
             digitalWrite(checkpoints[cpIdx].pin, checkpoints[cpIdx].state);
         }
@@ -215,9 +215,9 @@ void RobotArm::registerDelayCheckpoint(int cpIdx, int duration) {
 /*
 Saves a checkpoint at the given index as a valve state checkpoint.
 */
-void RobotArm::registerValveCheckpoint(int cpIdx, bool state, int pin) {
-    R_DPRINTLN("Registering valve as checkpoint: " + String(cpIdx) + " state: " + String(state) + " pin: " + String(pin));
-    checkpoints[cpIdx].type = CP_TYPE_VALVE;
+void RobotArm::registerGPIOCheckpoint(int cpIdx, bool state, int pin) {
+    R_DPRINTLN("Registering GPIO checkpoint: " + String(cpIdx) + " pin: " + String(pin) + " state: " + String(state));
+    checkpoints[cpIdx].type = CP_TYPE_GPIO;
     checkpoints[cpIdx].state = state;
     checkpoints[cpIdx].pin = pin;
 }

@@ -6,7 +6,7 @@
 #define CP_TYPE_NONE 0
 #define CP_TYPE_MOVE_TO 1
 #define CP_TYPE_DELAY 2
-#define CP_TYPE_VALVE 3
+#define CP_TYPE_GPIO 3
 
 
 class Checkpoint {

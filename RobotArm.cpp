@@ -48,7 +48,7 @@ void RobotArm::init() {
 
 
 /*
-Moves the robot arm to the given coordinates. Time for the move is automatically calculated.
+Moves the robot arm to the given coordinates. Time for the move is automatically assigned.
 */
 void RobotArm::move(float x, float y, float z) {
     R_DPRINTLN("Move called to: " + String(x) + " " + String(y) + " " + String(z));
@@ -241,6 +241,9 @@ void RobotArm::clearAllCheckpoints() {
 }
 
 
+/*
+Toggles the enable state of the picker.
+*/
 void RobotArm::switchPicker(bool state) {
     R_DPRINTLN("Switching picker: " + String(state));
     pickerController.toggle(state);

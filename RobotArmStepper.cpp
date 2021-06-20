@@ -118,12 +118,13 @@ void RobotArmStepper::moveSteps(int stepsToMove, int timeMillis) {
         correctiveSteps -= freqs[i];
     }
 
-    int i = 0;
-    while (correctiveSteps > 0) {
-        freqs[i]++;
-        correctiveSteps--;
-        i = (i + 1) % timeSlices;
+    // add in corrective steps
+    int correctiveStepsPerInterval = correctiveSteps / timeSlices;
+    int correctiveStepsPerIntervalRem = correctiveSteps % timeSlices;
+    for (int i = 0; i < timeSlices; i++) {
+        freqs[i] += correctiveStepsPerInterval;
     }
+    freqs[midPoint] += correctiveStepsPerIntervalRem;
 
     // set pulse target and reset variables
     target = stepsToMove;

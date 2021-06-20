@@ -74,6 +74,7 @@ void setupBlynk() {
 
 
 void startLabel() {
+    Serial.println("Starting label placer");
     bridgeLabel.virtualWrite(V10, ROBO_ARM1_ID);
 }
 

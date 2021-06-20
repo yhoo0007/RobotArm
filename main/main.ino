@@ -149,17 +149,19 @@ BLYNK_WRITE(V7) {  // set delay checkpoint
 
 
 BLYNK_WRITE(V8) {  // set valve checkpoint
-    int choice = param.asInt();
-    if (choice == 1) {
-      Serial.println(String(choice) + " Valve ON");
-      choice = 1;
-    } else if (choice == 2) {
-      Serial.println(String(choice) + " Valve OFF");
-      choice = 0;
+    // By default Blynk sends the param as 1 or 2, this needs to be changed to 0/false or 1/true.
+    int state = param.asInt();
+    if (state == 1) {
+      Serial.println(String(state) + " Valve ON");
+      state = 1;
+    } else if (state == 2) {
+      Serial.println(String(state) + " Valve OFF");
+      state = 0;
     } else {
-      Serial.println("Unknown choice: " + String(choice));
+      Serial.println("Unknown choice: " + String(state));
+      return;
     }
-    robotArm.registerValveCheckpoint(cpIdx, choice, valvePin);
+    robotArm.registerGPIOCheckpoint(cpIdx, state, valvePin);
 }
 
 

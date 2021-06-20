@@ -17,6 +17,9 @@ int valvePin = 33;
 #define CAPPING_ID 4
 #define LABEL_ID 5
 
+long last_log_time = 0;
+const int log_interval = 10000;
+
 
 void setup() {
     Serial.begin(115200);
@@ -38,20 +41,20 @@ void setup() {
 void loop() {
     Blynk.run();
     if (Blynk.connected()) {
-      if (playback || startSignal) {
-          Serial.println("Playing back");
-  //        robotArm.playback();  // blocking playback
-          for (int i = 0; i < NUM_CP; i++) {
-              robotArm.executeCheckpoint(i);
-          }
-          Serial.println("Cycle completed");
-          startSignal = false;
-          delay(200);
-          bridgeConv.virtualWrite(V8, ROBO_ARM2_ID);
-          Serial.println("Done signal sent!");
-      }
+        if (playback || startSignal) {
+            Serial.println("Playing back");
+            robotArm.playback();  // blocking playback
+            Serial.println("Cycle completed");
+            startSignal = false;
+            delay(200);
+            bridgeConv.virtualWrite(V8, ROBO_ARM2_ID);
+            Serial.println("Done signal sent!");
+        }
     } else {
         Serial.println("BLYNK DISCONNECTED");
+    }
+    if (millis() > last_log_time + log_interval) {
+        Serial.println("M: " + String(ESP.getFreeHeap()));
     }
 }
 

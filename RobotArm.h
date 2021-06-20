@@ -30,6 +30,7 @@ class RobotArm {
     void registerPositionCheckpoint(int cpIdx);
     void registerDelayCheckpoint(int cpIdx, int duration);
     void registerGPIOCheckpoint(int cpIdx, bool state, int pin);
+    void registerFuncCheckpoint(int cpIdx, void (*func)());
     void clearCheckpoint(int cpIdx);
     void clearAllCheckpoints();
 

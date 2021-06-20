@@ -184,6 +184,11 @@ void RobotArm::executeCheckpoint(int cpIdx) {
             digitalWrite(checkpoints[cpIdx].pin, checkpoints[cpIdx].state);
         }
         break;
+        case CP_TYPE_FUNC:
+        {
+            checkpoints[cpIdx].func();
+        }
+        break;
         case CP_TYPE_NONE:
         break;
     }
@@ -220,6 +225,16 @@ void RobotArm::registerGPIOCheckpoint(int cpIdx, bool state, int pin) {
     checkpoints[cpIdx].type = CP_TYPE_GPIO;
     checkpoints[cpIdx].state = state;
     checkpoints[cpIdx].pin = pin;
+}
+
+
+/*
+Saves a checkpoint at the given index as an arbitrary function call.
+*/
+void RobotArm::registerFuncCheckpoint(int cpIdx, void (*func)()) {
+    R_DPRINTLN("Registering function checkpoint: " + String(cpIdx));
+    checkpoints[cpIdx].type = CP_TYPE_FUNC;
+    checkpoints[cpIdx].func = func;
 }
 
 

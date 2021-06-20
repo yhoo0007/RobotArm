@@ -18,6 +18,9 @@ int valvePin = 33;
 #define CAPPING_ID 4
 #define LABEL_ID 5
 
+long last_log_time = 0;
+const int log_interval = 10000;
+
 
 void setup() {
     Serial.begin(115200);
@@ -49,6 +52,9 @@ void loop() {
         }
     } else {
         Serial.println("BLYNK DISCONNECTED");   
+    }
+    if (millis() > last_log_time + log_interval) {
+        Serial.println("M: " + String(ESP.getFreeHeap()));
     }
 }
 

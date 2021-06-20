@@ -55,6 +55,7 @@ void loop() {
     }
     if (millis() > last_log_time + log_interval) {
         Serial.println("M: " + String(ESP.getFreeHeap()));
+        last_log_time = millis();
     }
 }
 

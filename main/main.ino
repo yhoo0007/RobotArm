@@ -10,7 +10,6 @@ bool playback = false;
 float x, y, z;  // buffer to receive blynk parameters
 int cpIdx = 0;
 int valvePin = 33;
-int startLabelCp = -1;
 
 #define CONVEYOR_ID 0
 #define ROBO_ARM1_ID 1
@@ -40,21 +39,14 @@ void setup() {
 void loop() {
     Blynk.run();
     if (Blynk.connected()) {
-      if (playback || startSignal) {
-          Serial.println("Playing back");
-  //        robotArm.playback();  // blocking playback
-          for (int i = 0; i < NUM_CP; i++) {
-              if (i == startLabelCp) {
-                  startLabel();
-              } else {
-                  robotArm.executeCheckpoint(i);
-              }
-          }
-          Serial.println("Cycle completed");
-          startSignal = false;
-          bridgeConv.virtualWrite(V9, ROBO_ARM1_ID);
-          Serial.println("Done signal sent!");
-      }
+        if (playback || startSignal) {
+            Serial.println("Playing back");
+            robotArm.playback();  // blocking playback
+            Serial.println("Cycle completed");
+            startSignal = false;
+            bridgeConv.virtualWrite(V9, ROBO_ARM1_ID);
+            Serial.println("Done signal sent!");
+        }
     } else {
         Serial.println("BLYNK DISCONNECTED");   
     }
@@ -100,8 +92,8 @@ BLYNK_WRITE(V2) {  // Z position slider
 }
 
 
-BLYNK_WRITE(V3) {  // initiate label placer
-    startLabelCp = cpIdx;
+BLYNK_WRITE(V3) {  // set start label checkpoint
+    robotArm.registerFuncCheckpoint(cpIdx, startLabel);
 }
 
 

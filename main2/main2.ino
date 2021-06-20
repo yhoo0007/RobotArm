@@ -4,6 +4,8 @@
 #include <ESP32CAN.h>
 #include <CAN_config.h>
 
+WidgetBridge bridgeConv(V14); //Initiating Bridge Widget on V1 of Device A
+
 bool startSignal = false;
 bool playback = false;
 float x, y, z;  // buffer to receive blynk parameters
@@ -21,7 +23,6 @@ CAN_device_t CAN_cfg;
 #define CAPPING_ID 4
 #define LABEL_ID 5
 
-WidgetBridge bridgeConv(V14); //Initiating Bridge Widget on V1 of Device A
 
 void setup() {
     Serial.begin(115200);
@@ -36,8 +37,6 @@ void setup() {
     motorController.init();
     Serial.println("Setting up Blynk");
     setupBlynk();
-    //Serial.println("Setting up CAN bus");
-    //setupCAN();
     Serial.println("Setup complete\n");
 }
 
@@ -84,17 +83,6 @@ void setupCAN() {
     ESP32Can.CANInit();
 }
 
-/*
-bool startSignal() {
-    CAN_frame_t rx_frame;
-    if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, 3*portTICK_PERIOD_MS) == pdTRUE) {
-      if (rx_frame.MsgID == LABEL_ID && rx_frame.data.u8[0] == 1) {
-        return true;  
-      }
-    }
-    return false;
-}
-*/
 
 BLYNK_CONNECTED() {
   bridgeConv.setAuthToken(""); // Token of the hardware Conveyor

@@ -39,8 +39,6 @@ void setup() {
     motorController.init();
     Serial.println("Setting up Blynk");
     setupBlynk();
-    Serial.println("Setting up CAN bus");
-    //setupCAN();
     Serial.println("Setup complete\n");
 }
 
@@ -64,8 +62,7 @@ void loop() {
           Serial.println("Done signal sent!");
       }
     } else {
-        Serial.println("BLYNK DISCONNECTED");
-        
+        Serial.println("BLYNK DISCONNECTED");   
     }
 }
 
@@ -91,78 +88,16 @@ void setupCAN() {
     ESP32Can.CANInit();
 }
 
-/*
-bool startSignal() {
-    CAN_frame_t rx_frame;
-    if (xQueueReceive(CAN_cfg.rx_queue, &rx_frame, 3*portTICK_PERIOD_MS) == pdTRUE) {
-      if (rx_frame.MsgID == CONVEYOR_ID && rx_frame.data.u8[0] == 1) {
-        return true;  
-      }
-    }
-    return false;
-}
-*/
-
-/*
-void endSignal() {
-  
-    CAN_frame_t tx_frame;
-    tx_frame.FIR.B.FF = CAN_frame_std;
-    tx_frame.MsgID = ROBO_ARM1_ID;
-    tx_frame.FIR.B.DLC = 8;
-    tx_frame.data.u8[0] = 1;
-    tx_frame.data.u8[1] = 0;
-    tx_frame.data.u8[2] = 0;
-    tx_frame.data.u8[3] = 0;
-    tx_frame.data.u8[4] = 0;
-    tx_frame.data.u8[5] = 0;
-    tx_frame.data.u8[6] = 0;
-    tx_frame.data.u8[7] = 0;
-    ESP32Can.CANWriteFrame(&tx_frame);
-    
-}
-*/
 
 void startLabel() {
-  /*
-    CAN_frame_t tx_frame;
-    tx_frame.FIR.B.FF = CAN_frame_std;
-    tx_frame.MsgID = ROBO_ARM1_ID;
-    tx_frame.FIR.B.DLC = 8;
-    tx_frame.data.u8[0] = 0;
-    tx_frame.data.u8[1] = 1;
-    tx_frame.data.u8[2] = 0;
-    tx_frame.data.u8[3] = 0;
-    tx_frame.data.u8[4] = 0;
-    tx_frame.data.u8[5] = 0;
-    tx_frame.data.u8[6] = 0;
-    tx_frame.data.u8[7] = 0;
-    ESP32Can.CANWriteFrame(&tx_frame);    
-    */
     bridgeLabel.virtualWrite(V10, ROBO_ARM1_ID);
 }
+
 
 BLYNK_CONNECTED() {
     bridgeConv.setAuthToken("");
     bridgeLabel.setAuthToken("");
 }
-
-
-// void startLabel() {
-//     CAN_frame_t tx_frame;
-//     tx_frame.FIR.B.FF = CAN_frame_std;
-//     tx_frame.MsgID = ROBO_ARM1_ID;
-//     tx_frame.FIR.B.DLC = 8;
-//     tx_frame.data.u8[0] = 0;
-//     tx_frame.data.u8[1] = 1;
-//     tx_frame.data.u8[2] = 0;
-//     tx_frame.data.u8[3] = 0;
-//     tx_frame.data.u8[4] = 0;
-//     tx_frame.data.u8[5] = 0;
-//     tx_frame.data.u8[6] = 0;
-//     tx_frame.data.u8[7] = 0;
-//     ESP32Can.CANWriteFrame(&tx_frame);    
-// }
 
 
 BLYNK_WRITE(V0) {  // X position slider
@@ -225,7 +160,6 @@ BLYNK_WRITE(V8) {  // set valve checkpoint
       Serial.println("Unknown choice: " + String(choice));
     }
     robotArm.registerValveCheckpoint(cpIdx, choice, valvePin);
-//    robotArm.registerValveCheckpoint(cpIdx, param.asInt());
 }
 
 
